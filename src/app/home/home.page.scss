@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Arima:wght@100..700&display=swap');
+
+.contenedor{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+
+}
+
+.icono {
+    display: flex;
+    justify-content: center;
+    margin-bottom: -6px;
+    margin-top: 50px; 
+    
+    img {
+      width: 200px; 
+      height: 200px; 
+      border-radius: 50%; 
+    }
+  }
+.contenedorPrincipal {
+    padding: 20px;
+    text-align: center;
+    font-family: "Arima", system-ui;
+  
+    h3 {
+      color: #333;
+      font-size: 24px;
+    }
+  
+    ion-item {
+      margin-bottom: 20px;
+    }
+  
+    .boton-principal {
+        --background: #a169f8;  
+        --color: white;         
+    }
+      
+  
+    p {
+      color: #555;
+      font-size: 14px;
+  
+      a {
+        color: #6100ff;
+        text-decoration: none;
+  
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .titulo{
+        font-weight: 800 ;
+    }
+
+    .text-primary{
+        color: #6100ff;
+    }
+  }

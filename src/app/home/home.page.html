@@ -1,0 +1,31 @@
+
+<ion-content class="contenedor">
+  <div class="icono">
+    <img src="../../assets/icono.png" class="icono" alt="Icono">
+  </div>
+  <div class="contenedorPrincipal">
+    <h3 class="titulo">Inicio de Sesión</h3>
+    <form (ngSubmit)="iniciarSesion()" method="POST">
+      <ion-item>
+        <ion-label position="stacked"><strong>Email</strong></ion-label>
+        <ion-input type="email" placeholder="hello@example.com" [(ngModel)]="email" name="Correo" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked"><strong>Contraseña</strong></ion-label>
+        <ion-input type="password" placeholder="Password" [(ngModel)]="password" name="contrasena" required></ion-input>
+      </ion-item>
+
+      <div style="padding-top: 20px;">
+        <p>¿Aún no tienes una cuenta? <a class="text-primary" href="#">Regístrate Aquí</a></p>
+      </div>
+
+      <div style="padding-top: 5px;">
+        <a class="text-primary" href="#">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <div class="ion-text-center" style="padding-top: 20px;">
+        <ion-button expand="full" type="submit" class="boton-principal">Iniciar Sesión</ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>
