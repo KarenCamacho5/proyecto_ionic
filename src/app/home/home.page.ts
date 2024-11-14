@@ -1,44 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule} from '@angular/forms';
-import { NavController, IonicModule } from '@ionic/angular'; 
-
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonInput, IonLabel, IonItem } from '@ionic/angular/standalone';
+import { NavController } from '@ionic/angular';
+import { AuthService } from '../services/auth.service';
+import { IonicStorageModule } from '@ionic/storage-angular';
+import { Storage } from '@ionic/storage-angular'; 
+import { IonHeader, IonToolbar, IonTitle,  IonButton, IonInput, IonLabel, IonItem,  IonContent, } from '@ionic/angular/standalone';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonItem, IonLabel, IonInput, IonButton, IonHeader, IonToolbar, IonTitle, IonContent, CommonModule, FormsModule, ReactiveFormsModule, IonicModule],
+  providers: [AuthService],
+  imports: [IonHeader, IonToolbar, IonTitle,  IonButton, IonInput, IonLabel, IonItem,  IonContent,  CommonModule, FormsModule, HttpClientModule],
 })
 export class HomePage implements OnInit {
-
   email: string = '';
   password: string = '';
 
-  credenciales = [
-    ['karencamacho484@gmail.com', '1234'],
-    ['f.duran@montechelo.online', '1234'],
-    ['andres@gmail.com', '1234'],
-  ];
+  constructor(private navCtrl: NavController, private authService: AuthService, private storage: Storage) {}
 
-  constructor(private navCtrl: NavController) {}
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    await this.storage['create'](); // Inicializa el almacenamiento
   }
 
   iniciarSesion(): void {
-    // Verificar credenciales
-    const credencialValida = this.credenciales.some(
-      ([email, password]) => email === this.email && password === this.password
-    );
-
-    if (credencialValida) {
-      alert('Has iniciado sesión con éxito');
-      this.navCtrl.navigateForward('/main');
-    } else {
-      alert('Correo o contraseña incorrectos');
-    }
+    this.authService.login(this.email, this.password).subscribe({
+      next: async (response) => {
+        const token = response.token;
+        await this.storage['set']('token', token);
+        alert('Has iniciado sesión con éxito');
+        this.navCtrl.navigateForward('/main');
+      },
+      error: (err) => {
+        const mensajeError = err.error?.message || 'Correo o contraseña incorrectos';
+        alert(`Error en la autenticación: ${mensajeError}`);
+      }
+    });
   }
 }
