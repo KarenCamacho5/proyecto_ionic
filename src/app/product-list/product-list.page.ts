@@ -8,6 +8,16 @@ import { Storage } from '@ionic/storage-angular';
 import { NavController } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
 
+export interface Product {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  image: string;
+  active: boolean;
+}
+
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.page.html',
@@ -17,7 +27,7 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class ProductListPage implements OnInit {
 
-  products: any[] = [];
+  products:  Product[] = [];
 
   constructor(
     private storage: Storage,
@@ -33,9 +43,12 @@ export class ProductListPage implements OnInit {
     if (token) {
       this.productsService.getProducts(token).subscribe({
         next: (data: any) => {
-          console.log('Respuesta de la API:', data);
           if (data && Array.isArray(data.results)) {
-            this.products = data.results; // Asignar los productos desde la propiedad 'results'
+            // Reemplaza HTTP por HTTPS en las URLs de imagen
+            this.products = data.results.map((product: Product) => ({
+              ...product,
+              image: product.image.replace('http://', 'https://'),
+            })); // Asignar los productos desde la propiedad 'results'
           } else {
             console.error('No se encontraron productos válidos en la respuesta');
           }

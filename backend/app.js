@@ -4,7 +4,10 @@ const app = express();
 const loginRoute = require('./routes/login'); 
 const productsRoute = require('./routes/products'); 
 
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:4200', 'https://proyectoionic.onrender.com', 'http://localhost:3000', 'http://localhost:8100'], 
+    credentials: true
+}));
 
 // Middleware para manejar JSON
 app.use(express.json());
@@ -12,7 +15,7 @@ app.use(express.json());
 
 // Rutas
 app.use('/api/login', loginRoute);
-app.use('/api/products', productsRoute);
+app.use('/api', productsRoute);
 
 // Iniciar el servidor
 const PORT = 3000;

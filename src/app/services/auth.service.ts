@@ -7,7 +7,7 @@ import { map, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api/login';
+  private apiUrl = 'https://proyectoionic.onrender.com/api/login';
   private token = new BehaviorSubject<string | null>(null);
 
   constructor(private http: HttpClient) {}

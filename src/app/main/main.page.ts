@@ -22,5 +22,9 @@ export class MainPage implements OnInit {
   navToProductList() {
     this.navCtrl.navigateForward('/product-list');
   }
+  
+  navToreporte() {
+    this.navCtrl.navigateForward('/report');
+  }
 
 }

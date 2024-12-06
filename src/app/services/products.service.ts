@@ -8,7 +8,7 @@ import { Product } from '../models/product.model';
   providedIn: 'root'
 })
 export class ProductsService {
-  private apiUrl = 'http://localhost:3000/api/products'; // URL del backend
+  private apiUrl = 'https://proyectoionic.onrender.com/api'; // URL del backend
 
   constructor(private http: HttpClient) {}
 
