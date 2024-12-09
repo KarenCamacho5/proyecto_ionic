@@ -19,7 +19,7 @@ export class ReportService {
   }
 
   downloadExcel(token: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/reporte/excel`, { 
+    return this.http.get(`${this.apiUrl}/reporte-excel`, { 
       headers: new HttpHeaders().set('Authorization', `Bearer ${token}`),
       responseType: 'blob',
     });

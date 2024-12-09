@@ -100,7 +100,7 @@ router.get('/reporte-pdf', async (req, res) => {
 
 
 // Ruta para generar Excel
-router.get('/reporte/excel', authenticateToken, async (req, res) => {
+router.get('/reporte-excel', authenticateToken, async (req, res) => {
     try {
         const fetch = (await import('node-fetch')).default;
         const response = await fetch('https://peticiones.online/api/products');
@@ -111,30 +111,50 @@ router.get('/reporte/excel', authenticateToken, async (req, res) => {
 
         // Definir columnas
         worksheet.columns = [
-            { header: 'ID', key: 'id', width: 10 },
-            { header: 'Nombre', key: 'name', width: 30 },
-            { header: 'Precio', key: 'price', width: 15 },
-        ];
+          { header: 'ID', key: 'id', width: 10 },
+          { header: 'Nombre', key: 'name', width: 30 },
+          { header: 'Descripción', key: 'description', width: 50 },
+          { header: 'Precio', key: 'price', width: 15 },
+          { header: 'Categoría', key: 'category', width: 20 },
+          { header: 'Activo', key: 'active', width: 10 },
+      ];
+      
 
-        // Agregar filas
-        products.data.forEach((product) => {
-            worksheet.addRow({
-                id: product.id,
-                name: product.name,
-                price: product.price,
-            });
-        });
+         // Agregar filas con los productos
+         if (products.results && products.results.length > 0) {
+          let counter = 1;
+          products.results.forEach((product) => {
+              worksheet.addRow({
+                  id: counter++,
+                  name: product.name,
+                  description: product.description || 'N/A',
+                  price: product.price,
+                  category: product.category || 'N/A',
+                  active: product.active ? 'Sí' : 'No',
+              });
+          });
+      } else {
+          // Agregar una fila indicando que no hay productos disponibles
+          worksheet.addRow({ id: '-', name: 'No hay productos disponibles', description: '-', price: '-', category: '-', active: '-' });
+      }
+      
 
-        // Configurar encabezados de respuesta
-        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        res.setHeader('Content-Disposition', 'attachment; filename="productos.xlsx"');
+      // Configurar encabezados de respuesta para descarga
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', 'attachment; filename="productos.xlsx"');
 
-        // Enviar archivo
-        await workbook.xlsx.write(res);
-        res.end();
-    } catch (error) {
-        res.status(500).json({ message: 'Error al generar el Excel' });
-    }
+      // Escribir el archivo Excel en la respuesta
+      await workbook.xlsx.write(res);
+      res.end();
+  } catch (error) {
+      console.error('Error al generar el Excel:', error.message);
+
+      // Enviar una respuesta de error en caso de fallo
+      res.status(500).json({
+          message: 'Error al generar el Excel. Inténtalo más tarde.',
+          error: error.message,
+      });
+  }
 });
 
 
